@@ -3,17 +3,18 @@
  */
 'use strict';
 angular.module('ngOpenmrsSampleApp')
-.factory('PatientService',['$resource',function($resource){
+.factory('PatientService',['$rootScope','$resource','AppSettings',function($rootScope,$resource,AppSettings){
     var PatientService = {};
-    var url='https://10.50.80.75:8443/amrs/';
+    var url;
     var patientRes;
 
     function getResource()
     {
+      url=AppSettings.getServer($rootScope.selServer);
       var r=url+'/ws/rest/v1/person?q:name';
       return $resource(r,{name: '@name'},
-        {query: {method: "GET", isArray: false}});
-    };
+        {query: {method: 'GET', isArray: false}});
+    }
 
     PatientService.getPatientByName=function(name,callback){
       patientRes=getResource();
@@ -23,7 +24,7 @@ angular.module('ngOpenmrsSampleApp')
         }
       );
 
-    }
+    };
 
     return PatientService;
 
