@@ -1,0 +1,25 @@
+<style type="text/css">
+  table.ampathforms {
+    border-collapse: collapse;
+  //background-color: #F3F9FF;
+  }
+  table.ampathforms > tbody > tr > td, table.ampathforms > tbody > tr > th {
+    border: 1px solid white;
+    vertical-align: baseline;
+    padding: 4px;
+    text-align: left;
+    background-color: #F3F9FF;
+  }
+</style>
+<p>Simple Patient Search Example.</p>
+<div>
+  <table class="ampathforms">
+    <tr>
+      <td>
+        Enter the patient name <input type="text" ng-model="searchname" ng-change="search()">
+        {{test}}
+      </td>
+    </tr>
+  </table>
+
+</div>

@@ -1,0 +1,58 @@
+<style type="text/css">
+  table.ampathforms {
+    border-collapse: collapse;
+  //background-color: #F3F9FF;
+  }
+  table.ampathforms > tbody > tr > td, table.ampathforms > tbody > tr > th {
+    border: 1px solid white;
+    vertical-align: baseline;
+    padding: 4px;
+    text-align: left;
+    background-color: #F3F9FF;
+  }
+</style>
+
+<div class="container">
+  <h1 style="text-align: center;">User Login Sample</h1>
+  <form name="login">
+    <table class="ampathforms" align="center">
+      <tr>
+        <td>
+          User Name
+        </td>
+        <td>
+          <input type="text" ng-model="username"/>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Password
+        </td>
+        <td>
+          <input type="password" ng-model="password"/>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align:center;">
+          <input type="submit" value="Login" ng-click="authenticate()"/>
+          <input type="submit" value="Cancel" ng-click="cancel()"/>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="text-align: center;">
+          {{feedback}}
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <input type="radio" ng-model="selServer" value="local" />Local Server
+          <input type="radio" ng-model="selServer" value="test"/>Test Server
+          <input type="radio" ng-model="selServer" value="etl"/>Etl Server
+        </td>
+      </tr>
+
+    </table>
+
+  </form>
+</div>
+
