@@ -17,9 +17,13 @@ angular.module('ngOpenmrsSampleApp')
       {
         url='https://10.50.80.75:8443/amrs/';
       }
+      else if (server=='local')
+      {
+        url='http://localhost:8080/amrs/';
+      }
       else
       {
-        url='https://localhost:8080/amrs/';
+        url='https://10.50.80.75:8443/amrs/';
       }
       return url;
     }

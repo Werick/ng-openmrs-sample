@@ -8,7 +8,7 @@
  * Controller of the ngOpenmrsSampleApp
  */
 angular.module('ngOpenmrsSampleApp')
-  .controller('MainCtrl', ['AuthService','$scope','$location' ,function (AuthService,$scope,$location) {
+  .controller('MainCtrl', ['AuthService','$scope','$location','$rootScope', function (AuthService,$scope,$location,$rootScope) {
     $scope.username='';
     $scope.password='';
     $scope.feedback='';
@@ -19,7 +19,7 @@ angular.module('ngOpenmrsSampleApp')
       AuthService.authenticate($scope.selServer,$scope.username,$scope.password,function(data){
         console.log(data);
 
-        if(data.authenticated){
+        if(AuthService.authenticated){
           $scope.feedback="login Successful";
           $location.path('/about');
         }

@@ -3,38 +3,68 @@
  */
 'use strict';
 angular.module('ngOpenmrsSampleApp')
-.factory('AuthService',['Base64','$resource','$http','AppSettings', function(Base64,$resource,$http,AppSettings){
-    var service={};
-    var url;
-    var amrsSession;
+.factory('AuthService',['Base64','$resource','$http','AppSettings','$rootScope','$cookieStore',
+    function(Base64,$resource,$http,AppSettings,$rootScope,$cookieStore){
 
-    service.setCredentials = function (username, password) {
-      var encoded = Base64.encode(username + ':' + password);
-      $http.defaults.headers.common.Authorization = 'Basic ' + encoded;
-    };
+      var service={};
+      var url;
+      var amrsSession;
+      var authdata='';
 
-    function getSession(server)
-    {
-      var r;
-      url=AppSettings.getServer(server);
-      r=url+'ws/rest/v1/session';
-      return $resource(r);
-    };
+      service.authenticated = false;
+      service.setAuthenticated = function (authenticated) {
+        this.authenticated = authenticated;
+      };
 
-    service.authenticate = function(server,username,password, callback) {
-      service.setCredentials(username,password);
+      service.isAuthenticated = function () {
+        return this.authenticated;
+      };
 
-      amrsSession = getSession(server);
+      service.setCredentials = function (username, password) {
 
-      return amrsSession.get({},
-        function (data, status, headers) {
-          callback(data);
-        },
-        function(error) {
-          console.log('error');
-          var error = {error: true, result: error};
-          callback(error);
-        });
+        authdata = Base64.encode(username + ':' + password);
+        $rootScope.authdata=authdata;
+        $http.defaults.headers.common.Authorization = 'Basic ' + authdata;
+      };
+
+      $rootScope.getCredentials=function()
+      {
+        $http.defaults.headers.common.Authorization = 'Basic ' + $rootScope.authdata;
+      }
+
+
+      function getSession(server)
+      {
+        var r;
+        url=AppSettings.getServer(server);
+        r=url+'ws/rest/v1/session';
+        return $resource(r);
+      };
+
+      service.authenticate = function(server,username,password, callback) {
+        service.setCredentials(username,password);
+
+        amrsSession = getSession(server);
+
+        return amrsSession.get({})
+          .$promise
+          //on success
+          .then(function (data, status, headers) {
+            service.setAuthenticated(data.authenticated);
+            callback(data);
+          }),
+          // on error
+          function(error) {
+            console.log('error');
+            var error = {error: true, result: error};
+            callback(error);
+          }
+      };
+
+    service.ClearCredentials = function () {
+      $rootScope.globals = {};
+      $cookieStore.remove('globals');
+      $http.defaults.headers.common.Authorization = 'Basic ';
     };
 
 

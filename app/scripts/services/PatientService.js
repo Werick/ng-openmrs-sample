@@ -3,7 +3,8 @@
  */
 'use strict';
 angular.module('ngOpenmrsSampleApp')
-.factory('PatientService',['$rootScope','$resource','AppSettings',function($rootScope,$resource,AppSettings){
+.factory('PatientService',['$rootScope','$resource','AppSettings','AuthService',
+    function($rootScope,$resource,AppSettings,AuthService){
     var PatientService = {};
     var url;
     var patientRes;
@@ -17,12 +18,28 @@ angular.module('ngOpenmrsSampleApp')
     }
 
     PatientService.getPatientByName=function(name,callback){
+      console.log('Logged Status '+$rootScope.authdata)
+      console.log('Default Creds: '+$rootScope.getCredentials());
+
       patientRes=getResource();
-      patientRes.get(name,
+      patientRes.get(name)
+        .$promise
+        //on success
+        .then(
         function (data) {
           callback(data);
         }
-      );
+      ),
+        //on failure
+      function(error)
+      {
+        console.log('error');
+        var error = {error: true, result: error};
+        console.log(error);
+        callback(error);
+      }
+
+
 
     };
 
